@@ -7,7 +7,7 @@ class OperacaoSchema(BaseModel):
     """ Define uma nova operação a ser inserida e como deve ser representado
     """
     sigla_acao: str = "PETR4"
-    tp_operacao: int = 1
+    tp_operacao: str = "Compra"
     quantidade: int = 100
     valor: float = 37.50
     
@@ -17,6 +17,14 @@ class OperacaoBuscaSchema(BaseModel):
     """
     id: str = 1
 
+class OperacaoViewSchema(BaseModel):
+    """ Define uma nova operação a ser inserida e como deve ser representado
+    """
+    id: str = 1
+    sigla_acao: str = "PETR4"
+    tp_operacao: str = "Compra"
+    quantidade: int = 100
+    valor: float = 37.50
 
 class ListagemOperacoesSchema(BaseModel):
     """ Define como uma listagem de operações será retornada.
@@ -31,6 +39,7 @@ def apresenta_operacoes(operacoes: List[Operacao]):
     result = []
     for operacoes in operacoes:
         result.append({
+            "id": operacoes.id,
             "sigla_acao": operacoes.sigla_acao,
             "tp_operacao": operacoes.tp_operacao,
             "quantidade": operacoes.quantidade,
@@ -59,5 +68,6 @@ def apresenta_operacao(operacao: Operacao):
         "valor": operacao.valor,
         "tp_operacao": operacao.tp_operacao,
     }
+
 
     

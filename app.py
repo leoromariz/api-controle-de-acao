@@ -36,8 +36,8 @@ def add_operacao(form: OperacaoSchema):
         tp_operacao=form.tp_operacao,
         quantidade=form.quantidade,
         valor=form.valor,)
-    if form.tp_operacao not in [1, 2]:
-            return {"message": "Tipo de operação inválido. Use 1 para Compra ou 2 para Venda."}, 400
+    if form.tp_operacao not in ["Compra", "Venda"]:
+            return {"message": "Tipo de operação inválido."}, 400
     logger.debug(f"Adicionando operação de sigla: '{operacao.sigla_acao}'")
     
     try:
@@ -114,3 +114,24 @@ def del_acao(query: OperacaoBuscaSchema):
         error_msg = "Não foi possível remover a operação :/"
         logger.warning(f"Erro ao remover operação '{query.id}', {error_msg} - {e}")
         return {"mesage": error_msg}, 404
+    
+@app.get('/operacao', tags=[operacao_tag],
+         responses={"200": OperacaoSchema, "404": ErrorSchema})
+def get_operacao(query: OperacaoBuscaSchema):
+    """Faz a busca por uma Operacao a partir do id da Operação
+
+    Retorna uma representação das Operações e ações associadas.
+    """
+    id = query.id
+    # criando conexão com a base
+    session = Session()
+    # fazendo a busca
+    operacao = session.query(Operacao).filter(Operacao.id == id).first()
+
+    if not operacao:
+        # se a operação não foi encontrada
+        error_msg = "Operação não encontrada na base :/"
+        return {"mesage": error_msg}, 404
+    else:
+        # retorna a representação da operação
+        return apresenta_operacao(operacao), 200

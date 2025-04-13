@@ -8,7 +8,7 @@ class Operacao(Base):
 
     id = Column(Integer, primary_key=True)
     sigla_acao = Column(String(10))
-    tp_operacao = Column(Integer)
+    tp_operacao = Column(String(10))
     quantidade = Column(Integer)
     valor = Column(Float)
     data_insercao = Column(DateTime, default=datetime.now())
